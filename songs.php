@@ -4,7 +4,7 @@ require_once './headers.php';
 require_once 'libs/Pabhoz/MySQLiManager/MySQLiManager.php';
 
 $db = new MySQLiManager('localhost','root','','AplicacionSuperCool');
-$table = "users";
+$table = "songs";
 
 if(isset($_GET["ejecute"])){
 	if($_GET["ejecute"] != null && $_GET["ejecute"] != ""){
@@ -12,11 +12,11 @@ if(isset($_GET["ejecute"])){
 				case "select":
 					select();
                 break;
-                case "login":
-					login();
+                case "submit":
+                    submit();
                 break;
-                case "signup":
-                    signUp();
+                case "todas":
+                    todas();
                 break;
 			}
 		}else{
@@ -24,21 +24,6 @@ if(isset($_GET["ejecute"])){
 		}
 }
 
-function login(){
-    global $db,$table;
-
-    if (!isset($_POST["username"])) die("Username must be provided");
-
-    //si ussername es igual al de la bace de datos asignarlo, sino dejarlo vacio
-    $where = (isset($_POST["username"])) ? "username = '$_POST[username]'" : "";
-   
-    //busque todo en la tabla, donde la condicion se cumpla
-    $fetch = $db->select("*",$table,$where);
-    $fetch = ($fetch == NULL) ? [] : $fetch;
-    $response = ($fetch[0]["password"] == $_POST["password"]) ? 1 : 0;
-
-    print json_encode(["login"=> $response]);
-}
 
 function select(){
     
@@ -52,7 +37,16 @@ function select(){
 
 }
 
-function signUp(){
+function todas(){
+    
+    global $db,$table;
+    $fetch = $db->select("title",$table);
+    $fetch = ($fetch == NULL) ? [] : $fetch;
+    print json_encode($fetch);	
+
+}
+
+function submit(){
     global $db,$table;
 
     $data = $_POST;
