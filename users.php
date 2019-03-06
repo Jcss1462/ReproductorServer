@@ -4,20 +4,48 @@ require_once './headers.php';
 require_once 'libs/Pabhoz/MySQLiManager/MySQLiManager.php';
 
 $db = new MySQLiManager('localhost','root','','AplicacionSuperCool');
-$table = "users";
+
 
 if(isset($_GET["ejecute"])){
 	if($_GET["ejecute"] != null && $_GET["ejecute"] != ""){
 			switch ($_GET["ejecute"]){
-				case "select":
+
+                //////////////////////////////////////////////////////////////ususarios
+                case "select":
+                    $table = "users";
 					select();
                 break;
                 case "login":
+                    $table = "users";
 					login();
                 break;
                 case "signup":
+                    $table = "users";
                     signUp();
                 break;
+                /////////////////////////////////////////////////////////////canciones
+                case "subsong":
+                    $table = "songs";
+                    signUp();
+                break;
+                case "selectSongs":
+                    $table = "songs";
+                    select();
+                break;
+                ///////////////////////////////////////////////////////////////artistas
+                case "subartist":
+                    $table = "artists";
+                    signUp();
+                break;
+                ///////////////////////////////////////////////////////////////albums
+                case "subalbum":
+                    $table = "albums";
+                    signUp();
+                break;
+
+
+
+
 			}
 		}else{
 			die("La función <b>".$_GET['ejecute']."</b> no existe");
