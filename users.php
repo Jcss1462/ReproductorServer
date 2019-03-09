@@ -30,7 +30,7 @@ if(isset($_GET["ejecute"])){
                 break;
                 case "selectSongs":
                     $table = "songs";
-                    select();
+                    selectcan();
                 break;
                 ///////////////////////////////////////////////////////////////artistas
                 case "subartist":
@@ -41,6 +41,13 @@ if(isset($_GET["ejecute"])){
                 case "subalbum":
                     $table = "albums";
                     signUp();
+                break;
+
+                case "getMyInfo":
+            
+                    $table = "users";
+                    getMyInfo();
+            
                 break;
 
 
@@ -72,9 +79,17 @@ function select(){
     
     global $db,$table;
 
-    $where = (isset($_POST["username"])) ? "username = '$_POST[username]'" : "";
+    $where =  "username = '$_GET[username]'";
 
     $fetch = $db->select("*",$table,$where);
+    $fetch = ($fetch == NULL) ? [] : $fetch;
+    print json_encode($fetch);	
+
+}
+
+function selectcan(){
+    global $db,$table;
+    $fetch = $db->select("*",$table);
     $fetch = ($fetch == NULL) ? [] : $fetch;
     print json_encode($fetch);	
 
@@ -88,4 +103,21 @@ function signUp(){
 
     $fetch = $db->insert($table,$data);
     print json_encode($fetch);
+}
+
+function getMyInfo(){
+    global $db,$table;
+
+    $where =  "username = '$_GET[username]'";
+
+    $user = $db->select("id,username,email",$table,$where)[0];
+
+    $user["library"] = $db->select("songs_id as id","libraries","users_id = $user[id]");
+    foreach ($user["library"] as $key => $song) {
+        $user["library"][$key] = $db->select("*","songs","id = $song[id]")[0];
+    }
+
+    $user["playlist"] = $db->select("id,name,isPublic","playlists","owner = $user[id]");
+    
+    echo json_encode($user);
 }
