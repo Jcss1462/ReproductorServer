@@ -121,3 +121,4 @@ function getMyInfo(){
     
     echo json_encode($user);
 }
+
