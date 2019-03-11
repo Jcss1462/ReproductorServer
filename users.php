@@ -122,3 +122,19 @@ function getMyInfo(){
     echo json_encode($user);
 }
 
+function getMysongNoLIBRARY(){
+    global $db,$table;
+
+    $where =  "username = '$_GET[username]'";
+
+    $user = $db->select("id,username,email",$table,$where)[0];
+
+    $user["library"] = $db->select("songs_id as id","libraries","users_id = $user[id]");
+    foreach ($user["library"] as $key => $song) {
+        $user["library"][$key] = $db->select("*","songs","id = $song[id]")[0];
+    }
+
+    $user["playlist"] = $db->select("id,name,isPublic","playlists","owner = $user[id]");
+    
+    echo json_encode($user);
+}
