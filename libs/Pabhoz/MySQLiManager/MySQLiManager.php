@@ -62,6 +62,18 @@ class MySQLiManager{
 
 	}
 
+	function selectAdvanced($sentence){
+
+		$result = $this->link->query($sentence) or die($this->link->error.__LINE__);
+		if($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()){
+                        $response[] = $row;
+                    }
+                    return $response;
+		}
+
+	}
+
 	/**
 	* insert
 	*

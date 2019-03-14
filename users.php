@@ -50,6 +50,10 @@ if(isset($_GET["ejecute"])){
             
                 break;
 
+                case "nmc":
+                    nmc();
+                break;
+
 
 
 
@@ -139,3 +143,24 @@ function getMysongNoLIBRARY(){
     
     echo json_encode($user);
 }
+
+function nmc(){
+
+    global $db;
+
+    $where =  "username = '$_GET[username]'";
+    $user = $db->select("id,username,email","users",$where)[0];
+
+    $id = $user["id"];
+
+    $songs = $db->selectAdvanced("SELECT * FROM songs o
+    WHERE NOT EXISTS (SELECT 1
+    FROM (select * from songs INNER JOIN libraries where users_id=$id) c 
+    WHERE c.songs_id = o.id )");
+
+    echo json_encode($songs);
+    
+ 
+}
+
+
