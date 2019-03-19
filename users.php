@@ -24,7 +24,7 @@ if(isset($_GET["ejecute"])){
                     signUp();
                 break;
                 /////////////////////////////////////////////////////////////canciones
-                case "subsong":
+                case "CreateSong":
                     $table = "songs";
                     signUp();
                 break;
