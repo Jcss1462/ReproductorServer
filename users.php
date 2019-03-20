@@ -110,6 +110,7 @@ function signUp(){
     $data["id"] = "";
 
     $fetch = $db->insert($table,$data);
+    print_r($fetch);
     print json_encode($fetch);
 }
 
